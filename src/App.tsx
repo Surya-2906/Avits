@@ -1,10 +1,11 @@
 import React, { useState, useRef } from 'react';
-import { Upload, Bell, LayoutDashboard, Users, FolderKanban, Clock, LogOut, Sun, Moon, MessageSquare, Menu } from 'lucide-react';
+import { Upload, Bell, LayoutDashboard, Users, FolderKanban, Clock, LogOut, Sun, Moon, MessageSquare, Menu, Globe } from 'lucide-react';
 
 function App() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState('English');
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -24,6 +25,11 @@ function App() {
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
     document.documentElement.classList.toggle('dark');
+  };
+
+  const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedLanguage(event.target.value);
+    // You can add logic here to handle language change (e.g., updating context or state)
   };
 
   return (
@@ -49,8 +55,21 @@ function App() {
             </div>
           </div>
           <div className="flex items-center gap-6">
-            <div className={`flex items-center gap-1 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              <span>🌐 English</span>
+            <div className="flex items-center">
+              <Globe size={20} className={`mr-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
+              <select
+                value={selectedLanguage}
+                onChange={handleLanguageChange}
+                className={`bg-transparent border border-gray-300 rounded-md text-sm p-1 focus:outline-none focus:border-purple-900 ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                }`}
+              >
+                {['English', 'Spanish', 'French', 'German', 'Chinese'].map((language) => (
+                  <option key={language} value={language}>
+                    {language}
+                  </option>
+                ))}
+              </select>
             </div>
             <button 
               onClick={toggleDarkMode}
@@ -90,7 +109,7 @@ function App() {
           <h2 className={`text-xs font-medium mt-8 mb-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Lists</h2>
           <ul className="space-y-4">
             <li className={`flex items-center gap-2 ${isDarkMode ? 'text-gray-300 hover:text-purple-400' : 'text-gray-900'}`}>
-            <Users size={18} color="#a020f0" />
+              <Users size={18} color="#a020f0" />
               Employee
             </li>
             <li className={`flex items-center gap-2 ${isDarkMode ? 'text-gray-300 hover:text-purple-400' : 'text-gray-900'}`}>
@@ -159,7 +178,7 @@ function App() {
                 </div>
               </div>
 
-              {['Name:', 'Phone Number:', 'Password:', 'Email:', 'Joining Date:', 'Role:'].map((label, index) => (
+              {['Name:', 'Phone Number:', 'Password:', 'Email:', 'Joining Date:', 'Role:'].map((label) => (
                 <div key={label}>
                   <label className={`block mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>{label}</label>
                   <input 
